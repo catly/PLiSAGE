@@ -1,0 +1,17 @@
+model:
+  Point_MAE:
+    in_channels: 16  # Overridden by the lower in_channels if that's what you intend
+    emb_dims: 8
+    atom_dims: 6
+    group_size: 32
+    num_group: 512
+    dimscale: 6
+    num_heads: 2
+    cls_dim: 128
+    depth: 10
+    curvature_scales: [ 1.0, 2.0, 3.0, 5.0, 10.0 ]
+    orientation_units: 16
+    post_units: 8
+    loss: cdl2
+
+    
