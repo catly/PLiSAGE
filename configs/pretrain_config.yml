@@ -1,0 +1,67 @@
+model:
+  Point_MAE:
+    in_channels: 16
+    emb_dims: 8
+    group_size: 32
+    num_group: 512
+    dimscale: 6
+    num_heads: 2
+    transformer_config: {
+      mask_ratio: 0.6,
+      mask_type: 'rand',
+      depth: 10,
+      drop_path_rate: 0.1,
+      num_heads: 2,
+      dimscale: 6,
+      decoder_depth: 4,
+      decoder_num_heads: 6,
+    }
+    atom_dims: 6
+    loss: cdl2
+  gvp:
+    node_in_dim: [6, 3]
+    node_h_dim: [128, 32]
+    edge_in_dim: [32, 1]
+    edge_h_dim: [32, 1]
+    num_layers: 3
+    drop_rate: 0.3
+
+# Environment and data settings
+seed: 100
+device: 'cuda:0'
+
+data:
+  data_root: './data/processed_pre_data'
+  K: 16
+  sample_num: 2048
+  batch_size: 64
+
+# Training process settings
+training:
+  num_epochs: 100
+  checkpoint_dir: './pre_check/'
+  resume: True
+  # Path to the checkpoint for resuming, can be empty if not resuming
+  checkpoint_path: './pre_check/checkpoint.pth.tar'
+  # Template for saving new checkpoints
+  checkpoint_fname_template: 'checkpoint_epoch_{epoch}.pth.tar'
+
+# Optimizer settings
+optimizer:
+  name: 'Adam'
+  lr: 0.0001
+  weight_decay: 0.0001
+
+# Scheduler settings
+scheduler:
+  name: 'ReduceLROnPlateau'
+  mode: 'min'
+  factor: 0.5
+  patience: 5
+
+# Loss function settings
+loss:
+  temperature: 0.05
+  # Weights for combining the two pre-training losses
+  reconstruction_weight: 1.0
+  contrastive_weight: 1.0

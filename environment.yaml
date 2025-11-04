@@ -1,0 +1,55 @@
+name: plisage
+channels:
+  - pytorch
+  - pytorch3d
+  - conda-forge
+  - defaults
+dependencies:
+  # --- Core Frameworks ---
+  - python=3.8
+  - pip
+  - pytorch=1.12.0
+  - torchvision
+  - torchaudio
+  - cudatoolkit=11.3
+
+  # --- 3D and Geometry ---
+  - pytorch3d=0.7.4
+
+  # --- Chemistry and Biology ---
+  - openbabel
+  - biopython
+  - atom3d
+
+  # --- Core Scientific Python ---
+  - pandas
+  - scikit-learn
+  - scipy
+  - tqdm
+  - pyyaml
+  - easydict
+  - lifelines
+
+  # --- Pip for specific or non-conda packages ---
+  - pip:
+    # PyTorch Geometric stack (install with find-links to ensure compatibility)
+    - torch-scatter -f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+    - torch-sparse -f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+    - torch-cluster -f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+    - torch-spline-conv -f https://data.pyg.org/whl/torch-1.12.0+cu113.html
+    - torch-geometric
+
+    # Other dependencies
+    - pykeops
+    - timm
+    - plyfile
+    - pyvtk
+
+# MANUAL INSTALLATION REQUIRED
+# The following packages are custom CUDA extensions within this project and
+# must be installed manually after the conda environment is created.
+# Please follow the project's README for instructions.
+# - extensions/chamfer_dist
+# - extensions/emd
+# - pointnet2_ops (if sourced locally)
+# - knn_cuda (if sourced locally)

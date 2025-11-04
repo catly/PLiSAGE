@@ -1,0 +1,124 @@
+# Model configurations shared by downstream tasks
+model:
+  Point_MAE:
+    in_channels: 16
+    emb_dims: 8
+    group_size: 32
+    num_group: 512
+    dimscale: 6
+    num_heads: 2
+    transformer_config: {
+      mask_ratio: 0.6,
+      mask_type: 'rand',
+      depth: 10,
+      drop_path_rate: 0.1,
+      num_heads: 2,
+      dimscale: 6,
+      decoder_depth: 4,
+      decoder_num_heads: 6,
+    }
+    atom_dims: 6
+  gvp:
+    node_in_dim: [6, 3]
+    node_h_dim: [128, 32]
+    edge_in_dim: [32, 1]
+    edge_h_dim: [32, 1]
+    num_layers: 3
+    drop_rate: 0.3
+
+# --- Processing settings for PLI task ---
+pli_processing:
+  raw_data_dir: './data/downsteam_data/pdbbind_v2020/'
+  index_file_path: './data/downsteam_data/pdbbind_v2020/INDEX_refined_data.2020'
+  output_dir: './data/downsteam_data/processed_pli_data/'
+  curvature_scales: [1.0, 2.0, 3.0, 5.0, 10.0]
+
+# --- Processing settings for DTI task ---
+dti_processing:
+  csv_path: './data/downsteam_data/dti_data/data.csv'
+  pdb_dir: './data/downsteam_data/dti_data/'
+  output_dir: './data/downsteam_data/processed_dti_data/'
+  curvature_scales: [1.0, 2.0, 3.0, 5.0, 10.0]
+
+# --- Training settings for PLI task ---
+pli_training:
+  seed: 100
+  device: 'cuda:0'
+  data:
+    train_dir: './data/downsteam_data/processed_pli_data/train_data'
+    val_dir: './data/downsteam_data/processed_pli_data/val_data'
+    test_dir: './data/downsteam_data/processed_pli_data/test_data'
+    K: 16
+    sample_num: 4096
+    batch_size: 16
+  training:
+    num_epochs: 100
+    checkpoint_dir: './pli_out/'
+    pretrained_ckpt_path: './check_point/checkpoint.pth.tar'
+  optimizer:
+    name: 'Adam'
+    lr: 0.0001
+    weight_decay: 0.0005
+  scheduler:
+    name: 'ReduceLROnPlateau'
+    mode: 'min'
+    factor: 0.5
+    patience: 5
+  ligand_gnn:
+    in_channels: 18
+    hidden_channels: 64
+    out_channels: 16
+    edge_dim: 12
+    num_timesteps: 3
+    num_layers: 3
+    dropout: 0.3
+  fusion:
+    sur_in_dim: 48
+    sur_out_dim: 128
+    d_model: 128
+    nhead: 8
+    num_sur_layers: 1
+    num_struc_layers: 1
+    dropout: 0.3
+
+# --- Training settings for DTI task ---
+dti_training:
+  seed: 42
+  device: 'cuda:0'
+  data:
+    train_dir: './data/downsteam_data/processed_dti_data/train'
+    val_dir: './data/downsteam_data/processed_dti_data/val'
+    test_dir: './data/downsteam_data/processed_dti_data/test'
+    K: 16
+    sample_num: 4096
+    batch_size: 16
+  training:
+    num_epochs: 100
+    accumulation_steps: 8
+    checkpoint_dir: './dti_out/'
+    pretrained_ckpt_path: './check_point/checkpoint.pth.tar'
+  optimizer:
+    name: 'Adam'
+    lr: 0.0001
+    weight_decay: 0.0005
+  scheduler:
+    name: 'ReduceLROnPlateau'
+    mode: 'min'
+    factor: 0.5
+    patience: 5
+  ligand_gnn:
+    in_channels: 18
+    hidden_channels: 64
+    out_channels: 16
+    edge_dim: 12
+    num_timesteps: 3
+    num_layers: 3
+    dropout: 0.3
+  fusion:
+    sur_in_dim: 48
+    sur_out_dim: 128
+    d_model: 128
+    nhead: 8
+    num_sur_layers: 1
+    num_struc_layers: 1
+    dropout: 0.3
