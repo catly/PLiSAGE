@@ -1,1 +1,1 @@
-# In order to facilitate timely maintenance and communication, our codebase has been transferred to the developer's GitHub. The website is https://github.com/PullRequestPanda/PLiSAGE. Welcome to visit!
+# In order to facilitate timely maintenance and communication, our codebase has been transferred to the first author's GitHub. The website is https://github.com/PullRequestPanda/PLiSAGE. Welcome to visit!
